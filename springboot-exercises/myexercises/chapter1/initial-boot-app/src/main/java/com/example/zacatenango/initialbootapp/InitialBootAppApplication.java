@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 	// We can define an entire REST API by just declaring a subclass in our main application class annotated with
 	// @RestController @RequestMapping("/<URL>")
-	// Note: to change our listening port, we define server.port=<port> in application.properties
+	// Note: to change our listening port, we define server.port=<port> in application.properties, or server: port: on
+	// application.yml
 	@RestController @RequestMapping("/api") public class APIController
 	{
 		// To define an API GET endpoint, we define a function that returns String annotated with @GetMapping("/<URL>")

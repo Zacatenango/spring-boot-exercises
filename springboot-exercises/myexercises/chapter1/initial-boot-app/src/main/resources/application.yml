@@ -1,3 +1,11 @@
+# When using YAML, we define two sections with different values for spring: profiles
+# (values of this variable are arbitrary and only used to identify our application profiles)
+# and then we define variables for each profile.
+# In this case, if we start our application with -Dspring.profiles.active=dev, our app will start on port 8000;
+# and if we start it with -Dspring.profiles.active=test, our app will start on port 9000
+# Due to Spring's configuration hierarchy, if we start our app without a profile or with an undefined profile
+# (e.g. -Dspring.profiles.active=UAT), it will just fill in the blanks with default values. In this case, my app
+# will just start on the default port 8080.
 spring:
    profiles: dev
 server:
