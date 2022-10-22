@@ -1,3 +1,43 @@
+# Actuator is Spring's management interface. It exposes a JSON REST API for monitoring and interacting with my app.
+# It's installed by adding a dependency on Maven/Gradle; therefore, I'm not guaranteed to see it in Production
+# Starting with Spring 2.7.4, Actuator's endpoints are grouped under the /actuator/ URL
+# For your safety, on Spring 2.7.4, Actuator endpoint usage policy has changed.
+# Now, instead of exposing them by default, three parameters must be set to use an endpoint:
+# - management.security.enabled: false -- disables authentication on Actuator's endpoints. Obviously, this should
+#   only be used on development!
+# - management.endpoints.enabled-by-default: false -- endpoints are now opt-in. An opted-out endpoint is not even
+#   loaded into the app, and probably not even compiled into it. This is good security practice.
+# - management.endpoint.<relevant endpoint>.enabled: true -- loads the endpoint.
+# - management.endpoints.web.exposure.include: "<comma separated list of endpoints>" -- directly exposes these endpoints over HTTP
+#   By default they're only available over JMX, Jakarta's official application management tech, in which a "managed
+#   bean" (MBean) is bound to an "MBean server", which talks to either a "connector" that exposes the MBean server's API
+#   to the network as is, or to an "adaptor" that translates it to other management protocols such as SNMP or Netconf,
+#   or why not, to a full-blown HTML web page interface.
+#
+# Having enabled my env actuator endpoint, if I navigate to <host>/actuator/env, I'll now get a JSON document listing
+# my Spring application's environment variables. If I navigate to /actuator/mappings, I'll get all the app's URLs
+#
+# Note: if Maven can't seem to get an Actuator configuration change applied, try repacking the app twice.
+# I can't tell if it's Maven's fault or if IntelliJ's autosave timer is too long, but sometimes I only get my changes
+# on the second build.
+management:
+   security:
+      enabled: false
+
+   endpoint:
+      mappings:
+         enabled: true
+      env:
+         enabled: true
+
+   endpoints:
+      enabled-by-default: false
+      web:
+         exposure:
+            include: "mappings,env"
+
+---
+
 # When using YAML, we define two sections with different values for spring: profiles
 # (values of this variable are arbitrary and only used to identify our application profiles)
 # and then we define variables for each profile.
@@ -10,7 +50,9 @@ spring:
    profiles: dev
 server:
    port: 8000
+
 ---
+
 spring:
    profiles: test
 server:
