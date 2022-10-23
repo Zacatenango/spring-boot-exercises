@@ -28,3 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 		}
 	}
 }
+
+// Spring Boot features a built in JSON marshaller, good for creating REST web services thanks to JSON's inherent
+// simplicity. It also features the ability of doing that job transparently, without having to manually serialize
+// or deserialize our JSON code.
+// Logging is done with log4j. Make sure it's updated so it won't have log4shell!
+// Spring uses SnakeYAML as a YAML parser
