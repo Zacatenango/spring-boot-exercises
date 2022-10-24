@@ -10,16 +10,15 @@ import java.util.List;
 
 // To define a class as a Spring MVC controller, we annotate it with @Controller
 // We also have to give it a request mapping URL with @RequestMapping
-// Question: how is Spring aware that the view that corresponds to this controller is rooms.html?
-// I'll take over "MVC in Spring Boot" at 9:00
+// According to Spring documentation, templates are automatically picked up from src/main/resources/templates according
+// to the servlet's mapping
 @Controller @RequestMapping("/rooms") public class RoomController
 {
-   private static List<Room> rooms = new ArrayList<Room>();
+   private static List<Room> rooms = new ArrayList();
 
    // For the purposes of this exercise, a hardcoded list of rooms will do
-   // This is a static block. Static blocks are run as soon as the class is loaded in memory. When this happens is quite
-   // a good question, but for now let's just assume that this means this code will have run by the time the class is
-   // first used.
+   // This is a static block. Static blocks are run as soon as the class is loaded in memory. When this actually happens
+   // is a good question, but it's guaranteed to have run by the time we need our class for the first time.
    // One use for this is to initialize a class's static variables with values more complex than just a simple literal.
    // In this case, we're initializing it with a list of room objects.
    // Note: Static blocks do not replace psvmSa. They used to be able to replace it on Java 1.5 and earlier, but not
