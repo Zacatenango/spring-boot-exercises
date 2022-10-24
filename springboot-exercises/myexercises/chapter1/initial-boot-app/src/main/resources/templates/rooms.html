@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!-- This is a Thymeleaf template. It's an XML-based template engine similar to TAL. :terrified: -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="UTF-8" />
+   <title>Landon Hotel | Room View</title>
+</head>
+<body>
+
+   <table>
+      <tr>
+         <th>Room number</th>
+         <th>Name</th>
+         <th>Bed information</th>
+      </tr>
+      <!-- To iterate over a list of feijões, we add to the structure filled through iteration the extended XML attribute
+           th:each, whose value will be th:each="<iterator handle>: ${context expression that returns a list of objects}" -->
+      <!-- To populate the template's context, first we create a fully defined feijão that represents our info
+            -->
+      <tr th:each="room: ${rooms}">
+         <!-- Then I fill each child element with the extended attribute th:text="${<expression that returns a single variable}" -->
+         <td th:text="${room.number}"></td>
+         <td th:text="${room.name}"></td>
+         <td th:text="${room.info}"></td>
+      </tr>
+   </table>
+
+</body>
+</html>
