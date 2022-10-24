@@ -4,6 +4,8 @@
 <head>
    <meta charset="UTF-8" />
    <title>Landon Hotel | Room View</title>
+
+   <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 </head>
 <body>
 
@@ -15,8 +17,9 @@
       </tr>
       <!-- To iterate over a list of feijões, we add to the structure filled through iteration the extended XML attribute
            th:each, whose value will be th:each="<iterator handle>: ${context expression that returns a list of objects}" -->
-      <!-- To populate the template's context, first we create a fully defined feijão that represents our info
-            -->
+      <!-- To populate the template's context, first we create either a POJO or a fully defined feijão that represents our info
+           Then we add it on our view's class, by receiving an instance of org.springframework.ui.Model in our GET
+           controller and using its addAttribute() function, in which we pass the bean and name it "rooms" -->
       <tr th:each="room: ${rooms}">
          <!-- Then I fill each child element with the extended attribute th:text="${<expression that returns a single variable}" -->
          <td th:text="${room.number}"></td>
@@ -24,6 +27,12 @@
          <td th:text="${room.info}"></td>
       </tr>
    </table>
+
+   <button class="btn btn-primary">Reload</button>
+
+   <!-- Javascript footer section, where we load JQuery from the internet, and Bootstrap's JS from our static directory -->
+   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+   <script th:src="@{/js/bootstrap.bundle.js}" type="text/javascript"></script>
 
 </body>
 </html>

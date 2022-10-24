@@ -19,10 +19,7 @@ import java.util.List;
       }
    }
 
-   // On our GET response function, we return a plain Java object. Spring will automatically serialize it to JSON
+   // On our GET response function, we return either a POJO or a feijão. Spring will automatically serialize it to JSON
    // using the Jackson library, and transparently return that object as JSON.
-   @GetMapping public List<Room> getAllRooms_JSON()
-   {
-      return rooms;
-   }
+   @GetMapping public List<Room> getAllRooms_JSON() { return rooms; }
 }
