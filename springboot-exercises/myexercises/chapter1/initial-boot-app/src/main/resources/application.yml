@@ -43,13 +43,14 @@ server:
 
    # To implement SSL:
    # - In a terminal, go to src/main/resources and run keytool -genkey -keyalg RSA -alias zacatenango -keystore skvrn.jks -storepass sooperseekrit -validity 4000 -keysize 8192
-   # - This will prompt for a couple questions and generate a Java key storage file, which we will specify here
+   # - This will prompt for a couple questions and generate a Java key storage file, whose info we will specify here
+   # Note: remember to quote these values
    ssl:
-      key-store: classpath:skvrn.jks
-      key-store-password: sooperseekrit
-      key-store-type: JKS
-      key-alias: zacatenango
-      key-password: sooperseekrit
+      key-store: "classpath:skvrn.jks"
+      key-store-password: "sooperseekrit"
+      key-store-type: "JKS"
+      key-alias: "zacatenango"
+      key-password: "sooperseekrit"
 
 
 ---
