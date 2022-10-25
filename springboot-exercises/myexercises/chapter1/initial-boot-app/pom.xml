@@ -8,6 +8,28 @@
 		<version>2.7.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
+	<!--
+	   By default we generate a JAR file. This is best suited to modern cloud and cloud-like environments, because
+	   it packages the entire application into a single, self-contained file that You Press Play and It Just Works.
+	   This is important in cloud and cloud-like environments, because it saves work and money that would be otherwise
+	   spent setting up and maintaining a server software infrastructure; with a self-contained JAR, we can just
+	   provision an Amazon EC2 instance at the speed of Jeff Bezos's money making apparatus, upload the JAR, click
+	   Run and It Will Just Work.
+
+	   And yes, that implies it's OK to use the embedded instance of Tomcat - because it is not devops-like to maintain
+	   a server infrastructure, the devops-like thing is to instead just drop the JAR and run it with a single click.
+
+	   However, as usual, there are always some industries where anything less than 30 years old is kiddy stuff and
+	   here we use the old reliable things; to address that, Maven can generate good old WAR or EAR archives that can
+	   be manually deployed to my IBM WebSphere Application Server.
+
+	   The JAR file will be generated on target/<artifactId>-<version>.jar, and can be run with java -jar
+	   Modern cloud providers such as Amazon, IBM or Pivotal Cloud Foundry usually have built-in support for magically
+	   uploading a JAR to a cloud environment and running it at once, completely transparently and It Just Works.
+
+	   For more info, read up on 12 Factor Development, a methodology to develop devops-friendly applications
+	 -->
 	<groupId>com.example.zacatenango</groupId>
 	<artifactId>initial-boot-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -16,6 +38,7 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -28,6 +51,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 
 		<dependency>
