@@ -30,4 +30,11 @@ public class Room
    public void setName(String name) { this.name = name; }
    public void setNumber(String number) { this.number = number; }
    public void setInfo(String info) { this.info = info; }
+
+   // For the purpose of the command line runner, I implement the toString() method
+   // IntelliJ's automatic toString() generator will do for this one
+   @Override public String toString()
+   {
+      return "Room{" + "id=" + id + ", name='" + name + '\'' + ", number='" + number + '\'' + ", info='" + info + '\'' + '}';
+   }
 }
