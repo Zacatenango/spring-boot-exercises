@@ -6,8 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.List;
 
 // To define a class as a Spring MVC controller, we annotate it with @Controller
 // We also have to give it a request mapping URL with @RequestMapping

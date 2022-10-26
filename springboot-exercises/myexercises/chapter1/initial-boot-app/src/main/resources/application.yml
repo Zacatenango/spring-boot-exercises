@@ -59,7 +59,13 @@ spring:
    jpa:
       hibernate:
          ddl-auto: none
-
+   # Now we set up our data source
+   datasource:
+      # We specify kind of server through our JDBC URL
+      # Don't forget to specify database name!
+      url: "jdbc:postgresql://localhost:5432/springexercise"
+      username: "postgres"
+      password: "sooperseekrit"
 
 ---
 

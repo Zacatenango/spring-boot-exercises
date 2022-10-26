@@ -11,7 +11,8 @@ import javax.persistence.*;
 // Jakarta EE Persistence API:
 // We annotate this bean with @jakarta.persistence.Entity to specify that this is a data model, and with @Table to
 // specify that its corresponding table in the database is ROOM
-@Entity @Table(name="ROOM") public class Room
+// Note: on PostgreSQL, it is a good idea to also specify the schema on the annotation
+@Entity @Table(name="room", schema="public") public class Room
 {
    // We annotate our ID field with @Id @Column to mark it as a primary key whose underlying database column is ROOM_ID
    // @GeneratedValue means this is a calculated column, so we're not going to save any data to it; in this case, it's
