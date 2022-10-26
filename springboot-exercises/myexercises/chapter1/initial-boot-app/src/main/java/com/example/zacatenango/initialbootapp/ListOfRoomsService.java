@@ -1,5 +1,6 @@
 package com.example.zacatenango.initialbootapp;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,13 +14,33 @@ import java.util.List;
 // therefore, its containing class can be considered a "service".
 @Service public class ListOfRoomsService
 {
-   private static final List<Room> rooms = new ArrayList<>();
+   /*private static final List<Room> rooms = new ArrayList<>();
    static
    {
       for (int X=0; X<10; X++)
       {
          rooms.add(new Room(X, "Room " + X, "R" + X, "Q"));
       }
+   }*/
+
+   // Jakarta EE Persistence API:
+   // We used to have a hard-coded object initialized via static block. We will replace that with a room repository
+   // filled in by Spring's autowiring feature, which will scan this constructor and automatically fill it with an
+   // appropriate repository
+   private RoomRepository roomRepository;
+   @Autowired public ListOfRoomsService(RoomRepository roomRepository)
+   {
+      super();
+      this.roomRepository = roomRepository;
    }
-   public List<Room> getAllRooms() { return rooms; }
+
+   // Now we can fetch from the database
+   // This function will return us Room objects, because we provided Rooms as a parameter to the inheritance of
+   // the RoomRepository interface
+   public List<Room> getAllRooms()
+   {
+      List<Room> rooms = new ArrayList<>();
+      this.roomRepository.findAll().forEach(rooms::add);
+      return rooms;
+   }
 }

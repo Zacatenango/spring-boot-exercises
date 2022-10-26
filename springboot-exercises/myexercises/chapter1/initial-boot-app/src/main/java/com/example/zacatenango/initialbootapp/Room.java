@@ -1,15 +1,26 @@
 package com.example.zacatenango.initialbootapp;
 
+// This is the giveaway that our embedded Tomcat is Tomcat 9. Otherwise, we'd have to use jakarta.persistence.Entity
+import javax.persistence.*;
+
 // To define a Spring MVC model, we simply implement a standard fríjol.
 // IntelliJ Community Edition has automatic code generation for menial tasks such as putting the boilerplate required
 // to turn a Java class into a fully qualified feijão.
 // This is accessible with Alt-Insert on Windows and Linux, Ctrl-Enter on Mac OS X
-public class Room
+
+// Jakarta EE Persistence API:
+// We annotate this bean with @jakarta.persistence.Entity to specify that this is a data model, and with @Table to
+// specify that its corresponding table in the database is ROOM
+@Entity @Table(name="ROOM") public class Room
 {
-   private long id;
-   private String name;
-   private String number;
-   private String info;
+   // We annotate our ID field with @Id @Column to mark it as a primary key whose underlying database column is ROOM_ID
+   // @GeneratedValue means this is a calculated column, so we're not going to save any data to it; in this case, it's
+   // an autoincrementing column
+   @Id @Column(name="ROOM_ID") @GeneratedValue private long id;
+   // The rest of the fields are only annotated with @Column(name="<database column name>")
+   @Column(name="NAME") private String name;
+   @Column(name="ROOM_NUMBER") private String number;
+   @Column(name="BED_INFO") private String info;
 
    public Room() { super(); }
 

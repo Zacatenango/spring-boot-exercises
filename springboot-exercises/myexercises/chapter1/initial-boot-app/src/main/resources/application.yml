@@ -52,6 +52,14 @@ server:
       key-alias: "zacatenango"
       key-password: "sooperseekrit"
 
+---
+
+# We're going to provide our own database initialization scripts, instead of letting Hibernate do whatever it wants
+spring:
+   jpa:
+      hibernate:
+         ddl-auto: none
+
 
 ---
 
