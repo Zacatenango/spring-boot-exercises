@@ -40,6 +40,8 @@ management:
 server:
    compression:
       enabled: true
+   # SSL expects us to use port 8443
+   port: 8443
 
    # To implement SSL:
    # - In a terminal, go to src/main/resources and run keytool -genkey -keyalg RSA -alias zacatenango -keystore skvrn.jks -storepass sooperseekrit -validity 4000 -keysize 8192

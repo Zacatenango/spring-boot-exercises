@@ -30,16 +30,18 @@ import org.springframework.security.web.SecurityFilterChain;
             requests.antMatchers("/", "/home").permitAll().
             // Second filter: all other paths will have to be authenticated
             anyRequest().authenticated()
-            // Third filter: requests to /employeezone will be restricted to users in the STAFF group
-            // Fourth filter: requests to /reservedzone will be restricted to users in the OWNERS group
+            // Third filter: requests to /employeezone will be restricted to users with the STAFF role
+            // Fourth filter: requests to /actuator will be restricted to users with the ADMIN role
+            // Fifth filter: requests to /reservedzone and /actuator will be restricted to users with the OWNER role
       ).
       // Part 2: Specify login form
       formLogin
       (
          (form) ->
             // Login page is /login. Unauthenticated requests must be permitted, or login will be impossible
-            // Spring ships with a built in view controller for login whose name is "login", so our template must be
-            // src/main/resources/templates/login.html
+            // If I use the MVC framework, Spring Security will only provide the POST mapping for /login and leave
+            // the GET mapping to myself. Therefore, I must create separately a controller that provides the /login GET
+            // In this case I created it on class LoginController
             // We will use for now a minimal form snarfed from https://spring.io/guides/gs/securing-web/
             form.loginPage("/login").permitAll()
       ).
@@ -47,6 +49,7 @@ import org.springframework.security.web.SecurityFilterChain;
       logout
       (
          // Logout must also be allowed for everyone
+         // Note: /logout is a POST endpoint; this is because CSRF, which is enabled by default, requires it
          (logout) -> logout.permitAll()
       );
 
@@ -59,13 +62,23 @@ import org.springframework.security.web.SecurityFilterChain;
    // We obviously are going to have to figure out how to use an actual user repository on a real backend!
    @Bean public UserDetailsService userDetailsService()
    {
-      // We just up and build an UserDetails object with username "zacatenango", password "sooperseekrit", role "USER"
-      UserDetails user = User.withDefaultPasswordEncoder()
-         .username("zacatenango")
-         .password("sooperseekrit")
-         .roles("USER")
-         .build();
+      // To add multiple hard-coded users, we need to create several instances of UserDetails, create an
+      // InMemoryUserDetailsManager, and add each user to that manager
+      // Note: withDefaultPasswordEncoder is apparently marked as deprecated as a warning against using it on Production,
+      // which is something I'm going to take care of shortly
+      UserDetails regularuser = User.withDefaultPasswordEncoder().username("regularuser").password("sooperseekrit").roles("USER").build();
+      UserDetails employee = User.withDefaultPasswordEncoder().username("employee").password("sooperseekrit").roles("STAFF").build();
+      UserDetails sysadmin = User.withDefaultPasswordEncoder().username("sysadmin").password("sooperseekrit").roles("ADMIN").build();
+      UserDetails zacatenango = User.withDefaultPasswordEncoder().username("zacatenango").password("sooperseekrit").roles("OWNER").build();
 
-      return new InMemoryUserDetailsManager(user);
+      // With our users created, we create an empty InMemoryUserDetailsManager and add our users
+      InMemoryUserDetailsManager usersdatabase = new InMemoryUserDetailsManager();
+      usersdatabase.createUser(regularuser);
+      usersdatabase.createUser(employee);
+      usersdatabase.createUser(sysadmin);
+      usersdatabase.createUser(zacatenango);
+
+      // We return our hard-coded users database
+      return usersdatabase;
    }
 }
