@@ -49,8 +49,10 @@ import org.springframework.security.web.SecurityFilterChain;
       logout
       (
          // Logout must also be allowed for everyone
-         // Note: /logout is a POST endpoint; this is because CSRF, which is enabled by default, requires it
-         (logout) -> logout.permitAll()
+         // Note: this defines the security of the logout URL, not the logout itself; logout must be implemented
+         // manually with a regular view controller.
+         // In this case I did it with class LogoutController, by working with the underlying servlet request and response
+         (logout) -> logout.logoutUrl("/logout").permitAll()
       );
 
       // We finish our filter chain function by returning a built HTTP configuration
