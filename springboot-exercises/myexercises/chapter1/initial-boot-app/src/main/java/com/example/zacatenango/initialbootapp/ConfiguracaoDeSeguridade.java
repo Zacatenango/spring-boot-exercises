@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -28,11 +30,16 @@ import org.springframework.security.web.SecurityFilterChain;
             // First filter: unauthenticated requests to / and /home will be permitted
             // This happens because I'm calling permitAll() directly on my antMatchers(), which Spring takes as meaning "all users"
             requests.antMatchers("/", "/home").permitAll().
-            // Second filter: all other paths will have to be authenticated
+            // Second filter: requests to /employeezone will be restricted to users with the STAFF role
+            // This will send back an HTTP 403 Forbidden response, which means in a real system it should have
+            // an error page
+            antMatchers("/employeezone").hasAuthority("STAFF").
+            // Third filter: requests to the /actuator/* path will be restricted to users with the ADMIN or OWNER roles
+            antMatchers("/actuator/*").hasAnyAuthority("ADMIN", "OWNER").
+            // Fourth filter: requests to /reservedzone will be restricted to users with the OWNER role
+            // Last filter: all other paths will have to be authenticated
             anyRequest().authenticated()
-            // Third filter: requests to /employeezone will be restricted to users with the STAFF role
-            // Fourth filter: requests to /actuator will be restricted to users with the ADMIN role
-            // Fifth filter: requests to /reservedzone and /actuator will be restricted to users with the OWNER role
+
       ).
       // Part 2: Specify login form
       formLogin
@@ -64,14 +71,22 @@ import org.springframework.security.web.SecurityFilterChain;
    // We obviously are going to have to figure out how to use an actual user repository on a real backend!
    @Bean public UserDetailsService userDetailsService()
    {
+      // Note: withDefaultPasswordEncoder is deprecated, because in hard-coded passwords the default encoder is a dummy
+      // encoder that stores them as plaintext, which in 2022 is verboten even for a simple demo.
+      // Therefore, we will use instead an actual bcrypt password encoder.
+      // This function will return the official password encoder du jour as chosen by the Spring team. To manually pick
+      // one (WHICH YOU HAVE NO REASON TO BECAUSE TAMPERING WITH YOUR FRAMEWORK'S CRYPTO IS VERBOTEN, JUST SAY NO!),
+      // refer to this class's source code on https://github.com/spring-projects/spring-security/blob/main/crypto/src/main/java/org/springframework/security/crypto/factory/PasswordEncoderFactories.java
+      // Some discussion on overriding Spring's default choice available on https://stackoverflow.com/questions/65796088/how-override-the-default-bcryptpasswordencoder-created-through-passwordencoderfa
+      // The official password encoder as of 4 November 2022 is bcrypt
+      PasswordEncoder bcrypt = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
       // To add multiple hard-coded users, we need to create several instances of UserDetails, create an
       // InMemoryUserDetailsManager, and add each user to that manager
-      // Note: withDefaultPasswordEncoder is apparently marked as deprecated as a warning against using it on Production,
-      // which is something I'm going to take care of shortly
-      UserDetails regularuser = User.withDefaultPasswordEncoder().username("regularuser").password("sooperseekrit").roles("USER").build();
-      UserDetails employee = User.withDefaultPasswordEncoder().username("employee").password("sooperseekrit").roles("STAFF").build();
-      UserDetails sysadmin = User.withDefaultPasswordEncoder().username("sysadmin").password("sooperseekrit").roles("ADMIN").build();
-      UserDetails zacatenango = User.withDefaultPasswordEncoder().username("zacatenango").password("sooperseekrit").roles("OWNER").build();
+      UserDetails regularuser = User.withUsername("regularuser").password(bcrypt.encode("sooperseekrit")).roles("USER").build();
+      UserDetails employee = User.withUsername("employee").password(bcrypt.encode("sooperseekrit")).roles("STAFF").build();
+      UserDetails sysadmin = User.withUsername("sysadmin").password(bcrypt.encode("sooperseekrit")).roles("ADMIN").build();
+      UserDetails zacatenango = User.withUsername("zacatenango").password(bcrypt.encode("sooperseekrit")).roles("OWNER").build();
 
       // With our users created, we create an empty InMemoryUserDetailsManager and add our users
       InMemoryUserDetailsManager usersdatabase = new InMemoryUserDetailsManager();

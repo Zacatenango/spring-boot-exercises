@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller public class RestrictedPages
 {
-   @GetMapping("/userzone") public String userzone()
-   {
-      return "userzone";
-   }
+   @GetMapping("/userzone") public String userzone() { return "userzone"; }
+   @GetMapping("/employeezone") public String employeezone() { return "employeezone"; }
 }
