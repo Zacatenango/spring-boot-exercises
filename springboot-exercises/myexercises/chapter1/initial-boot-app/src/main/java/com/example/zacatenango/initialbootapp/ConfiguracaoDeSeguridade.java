@@ -37,6 +37,7 @@ import org.springframework.security.web.SecurityFilterChain;
             // Third filter: requests to the /actuator/* path will be restricted to users with the ADMIN or OWNER roles
             antMatchers("/actuator/*").hasAnyAuthority("ADMIN", "OWNER").
             // Fourth filter: requests to /reservedzone will be restricted to users with the OWNER role
+            antMatchers("/reservedzone").hasAuthority("OWNER").
             // Last filter: all other paths will have to be authenticated
             anyRequest().authenticated()
 
@@ -74,9 +75,9 @@ import org.springframework.security.web.SecurityFilterChain;
       // Note: withDefaultPasswordEncoder is deprecated, because in hard-coded passwords the default encoder is a dummy
       // encoder that stores them as plaintext, which in 2022 is verboten even for a simple demo.
       // Therefore, we will use instead an actual bcrypt password encoder.
-      // This function will return the official password encoder du jour as chosen by the Spring team. To manually pick
-      // one (WHICH YOU HAVE NO REASON TO BECAUSE TAMPERING WITH YOUR FRAMEWORK'S CRYPTO IS VERBOTEN, JUST SAY NO!),
-      // refer to this class's source code on https://github.com/spring-projects/spring-security/blob/main/crypto/src/main/java/org/springframework/security/crypto/factory/PasswordEncoderFactories.java
+      // This function will return the official password encoder du jour as chosen by the Spring team. To manually pick one
+      // (WHICH YOU HAVE NO REASON TO BECAUSE TAMPERING WITH YOUR FRAMEWORK'S CRYPTO IS VERBOTEN LIKE DRUGS IN THE
+      // REAGAN ERA, JUST SAY NO!), refer to this class's source code on https://github.com/spring-projects/spring-security/blob/main/crypto/src/main/java/org/springframework/security/crypto/factory/PasswordEncoderFactories.java
       // Some discussion on overriding Spring's default choice available on https://stackoverflow.com/questions/65796088/how-override-the-default-bcryptpasswordencoder-created-through-passwordencoderfa
       // The official password encoder as of 4 November 2022 is bcrypt
       PasswordEncoder bcrypt = PasswordEncoderFactories.createDelegatingPasswordEncoder();

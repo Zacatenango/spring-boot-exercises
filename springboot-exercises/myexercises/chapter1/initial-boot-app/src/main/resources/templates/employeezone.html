@@ -3,12 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-  <title>Hello World!</title>
+   <title>Hello World!</title>
 </head>
 <body>
 <h1 th:inline="text">Hello, employee [[${#httpServletRequest.remoteUser}]]!</h1>
 <form th:action="@{/logout}" method="post">
-  <input type="submit" value="Sign Out"/>
+   <input type="submit" value="Sign Out"/>
 </form>
+
+<h1 th:inline="text">Messages for [[ ${#httpServletRequest.remoteUser} ]] </h1>
+<ul th:each="message: ${messages}">
+   <li th:text="${message.message}"></li>
+</ul>
+
 </body>
 </html>

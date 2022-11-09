@@ -14,15 +14,6 @@ import java.util.List;
 // therefore, its containing class can be considered a "service".
 @Service public class ListOfRoomsService
 {
-   /*private static final List<Room> rooms = new ArrayList<>();
-   static
-   {
-      for (int X=0; X<10; X++)
-      {
-         rooms.add(new Room(X, "Room " + X, "R" + X, "Q"));
-      }
-   }*/
-
    // Jakarta EE Persistence API:
    // We used to have a hard-coded object initialized via static block. We will replace that with a room repository
    // filled in by Spring's autowiring feature, which will scan this constructor and automatically fill it with an
